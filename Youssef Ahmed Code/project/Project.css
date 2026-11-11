@@ -1,0 +1,33 @@
+body{
+    background-color: forestgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}#box{
+    background-color: rgb(248, 250, 248);
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 100px rgb(0, 204, 255);
+}
+p{
+    padding: 20px,0px;
+}
+input,button{
+   border-radius: 10px;
+   padding: 5px;
+   margin: 3px;
+}
+button{
+    background-color: forestgreen;
+    color: white;
+}
+#blue{
+ background-color: rgb(251, 255, 0);
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+   padding: 5px;
+   margin: 3px;
+}

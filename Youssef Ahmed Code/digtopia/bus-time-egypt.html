@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Time Egypt - جدول المواصلات المصرية</title>
+    <link rel="stylesheet" href="bus_time.css">
+     <link rel="icon" type="image/x-icon" href="https://tse3.mm.bing.net/th/id/OIP.jUL0PSBMfc9G_Roy9KmGzgHaD3?r=0&rs=1&pid=ImgDetMain&o=7&rm=3">
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: ltr;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #002fff 0%, #8000ff 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 30px 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .search-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .search-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .search-group select,
+        .search-group input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-group select:focus,
+        .search-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-search {
+            grid-column: 1 / -1;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-search:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            padding: 30px 20px;
+        }
+
+        .results-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            display: none;
+        }
+
+        .results-title.active {
+            display: block;
+        }
+
+        .buses-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .bus-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .bus-card.active {
+            display: block;
+        }
+
+        .bus-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .bus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .bus-number {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .bus-time {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #764ba2;
+        }
+
+        .bus-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 1em;
+            color: #333;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status.arriving {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+
+        .status.coming {
+            background: #a29bfe;
+            color: white;
+        }
+
+        .status.delayed {
+            background: #fab1a0;
+            color: #d63031;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        .no-results.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .search-container {
+                grid-template-columns: 1fr;
+            }
+
+            .bus-details {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+    <div class="container">
+        <div class="header">
+            <h1>🚌 Bus Time Egypt</h1>
+            <p>Schedule Egyptian Bus Times</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-group">
+                    <label for="from-city">From City (المدينة من):</label>
+                    <select id="from-city">
+                        <option value="">Select starting city</option>
+                        <option value="cairo">Cairo - القاهرة</option>
+                        <option value="giza">Giza - الجيزة</option>
+                        <option value="alexandria">Alexandria - الإسكندرية</option>
+                        <option value="suez">Suez - السويس</option>
+                        <option value="ismailia">Ismailia - الإسماعيلية</option>
+                        <option value="aswan">Aswan - أسوان</option>
+                        <option value="luxor">Luxor - الأقصر</option>
+                    </select>
+                </div>
+
+                <div class="search-group">
+                    <label for="to-city">To City (المدينة إلى):</label>
+                    <select id="to-city">
+                        <option value="">Select destination</option>
+                        <option value="cairo">Cairo - القاهرة</option>
+                        <option value="giza">Giza - الجيزة</option>
+                        <option value="alexandria">Alexandria - الإسكندرية</option>
+                        <option value="suez">Suez - السويس</option>
+                        <option value="ismailia">Ismailia - الإسماعيلية</option>
+                        <option value="aswan">Aswan - أسوان</option>
+                        <option value="luxor">Luxor - الأقصر</option>
+                    </select>
+                </div>
+
+                <div class="search-group">
+                    <label for="date">Travel Date (التاريخ):</label>
+                    <input type="date" id="date">
+                </div>
+
+                <div class="search-group">
+                    <label for="time">Preferred Time (الوقت المفضل):</label>
+                    <input type="time" id="time">
+                </div>
+
+                <button class="btn-search" onclick="searchBuses()">Search Buses 🔍</button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h2 class="results-title" id="results-title">Available Buses</h2>
+            <div class="buses-container" id="buses-container"></div>
+            <div class="no-results" id="no-results">No buses found. Please try different search criteria.</div>
+        </div>
+    </div>
+
+    <script src="bus_time.js">   const busData = {
+            'cairo-alexandria': [
+                { number: 'CA-001', departure: '06:00', arrival: '09:30', company: 'Misr Travel', seats: 45, available: 12, status: 'On Time' },
+                { number: 'CA-002', departure: '07:30', arrival: '11:00', company: 'Go Bus', seats: 45, available: 8, status: 'On Time' },
+                { number: 'CA-003', departure: '09:00', arrival: '12:30', company: 'East Delta', seats: 45, available: 22, status: 'On Time' },
+                { number: 'CA-004', departure: '10:30', arrival: '14:00', company: 'Misr Travel', seats: 45, available: 5, status: 'Arriving Soon' },
+                { number: 'CA-005', departure: '13:00', arrival: '16:30', company: 'Go Bus', seats: 45, available: 18, status: 'On Time' },
+            ],
+            'cairo-suez': [
+                { number: 'CS-001', departure: '06:30', arrival: '09:00', company: 'Superjet', seats: 50, available: 15, status: 'On Time' },
+                { number: 'CS-002', departure: '08:00', arrival: '10:30', company: 'Go Bus', seats: 50, available: 9, status: 'On Time' },
+                { number: 'CS-003', departure: '10:00', arrival: '12:30', company: 'Misr Travel', seats: 50, available: 25, status: 'On Time' },
+                { number: 'CS-004', departure: '12:00', arrival: '14:30', company: 'East Delta', seats: 50, available: 3, status: 'Delayed' },
+            ],
+            'cairo-aswan': [
+                { number: 'CA-ASWAN-001', departure: '19:00', arrival: '08:00+1', company: 'Misr Travel', seats: 40, available: 11, status: 'On Time' },
+                { number: 'CA-ASWAN-002', departure: '20:00', arrival: '09:30+1', company: 'Go Bus', seats: 40, available: 7, status: 'On Time' },
+                { number: 'CA-ASWAN-003', departure: '21:00', arrival: '10:30+1', company: 'Superjet', seats: 40, available: 19, status: 'On Time' },
+            ],
+            'alexandria-cairo': [
+                { number: 'AC-001', departure: '06:00', arrival: '09:30', company: 'East Delta', seats: 45, available: 20, status: 'On Time' },
+                { number: 'AC-002', departure: '07:45', arrival: '11:15', company: 'Go Bus', seats: 45, available: 6, status: 'On Time' },
+                { number: 'AC-003', departure: '10:00', arrival: '13:30', company: 'Misr Travel', seats: 45, available: 14, status: 'Arriving Soon' },
+            ],
+            'giza-suez': [
+                { number: 'GS-001', departure: '07:00', arrival: '10:00', company: 'Go Bus', seats: 50, available: 17, status: 'On Time' },
+                { number: 'GS-002', departure: '09:00', arrival: '12:00', company: 'East Delta', seats: 50, available: 10, status: 'On Time' },
+                { number: 'GS-003', departure: '11:00', arrival: '14:00', company: 'Superjet', seats: 50, available: 8, status: 'On Time' },
+            ],
+            'luxor-aswan': [
+                { number: 'LA-001', departure: '08:00', arrival: '12:00', company: 'Go Bus', seats: 40, available: 13, status: 'On Time' },
+                { number: 'LA-002', departure: '10:30', arrival: '14:30', company: 'Misr Travel', seats: 40, available: 9, status: 'On Time' },
+                { number: 'LA-003', departure: '14:00', arrival: '18:00', company: 'East Delta', seats: 40, available: 21, status: 'On Time' },
+            ],
+        };
+
+        function getRouteKey(from, to) {
+            return `${from}-${to}`;
+        }
+        function searchBuses() {
+            const fromCity = document.getElementById('from-city').value;
+            const toCity = document.getElementById('to-city').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            const resultsTitle = document.getElementById('results-title');
+            const busesContainer = document.getElementById('buses-container');
+            const noResults = document.getElementById('no-results');
+            busesContainer.innerHTML = '';
+            noResults.classList.remove('active');
+
+            if (!fromCity || !toCity || fromCity === toCity) {
+                alert('Please select different cities');
+                return;
+            }
+
+            const routeKey = getRouteKey(fromCity, toCity);
+            let buses = busData[routeKey] || [];
+            if (time) {
+                const selectedTime = time.split(':');
+                buses = buses.filter(bus => {
+                    const depTime = bus.departure.split(':');
+                    const depMinutes = parseInt(depTime[0]) * 60 + parseInt(depTime[1]);
+                    const selectedMinutes = parseInt(selectedTime[0]) * 60 + parseInt(selectedTime[1]);
+                    return depMinutes >= selectedMinutes;
+                });
+            }
+
+            if (buses.length === 0) {
+                noResults.classList.add('active');
+                resultsTitle.classList.remove('active');
+                return;
+            }
+
+            resultsTitle.classList.add('active');
+            resultsTitle.textContent = `Available Buses: ${capitalizeCity(fromCity)} → ${capitalizeCity(toCity)}`;
+
+            buses.forEach(bus => {
+                const statusClass = bus.status === 'On Time' ? 'coming' : 
+                                   bus.status === 'Arriving Soon' ? 'arriving' : 'delayed';
+                
+                const busCard = document.createElement('div');
+                busCard.className = 'bus-card active';
+                busCard.innerHTML = `
+                    <div class="bus-header">
+                        <div class="bus-number">${bus.number}</div>
+                        <div class="bus-time">${bus.departure} - ${bus.arrival}</div>
+                    </div>
+                    <div class="bus-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Company</span>
+                            <span class="detail-value">${bus.company}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seats Available</span>
+                            <span class="detail-value">${bus.available} / ${bus.seats}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Duration</span>
+                            <span class="detail-value">${calculateDuration(bus.departure, bus.arrival)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status</span>
+                            <span class="status ${statusClass}">${bus.status}</span>
+                        </div>
+                    </div>
+                `;
+                busesContainer.appendChild(busCard);
+            });
+        }
+
+        function capitalizeCity(city) {
+            const cityNames = {
+                'cairo': 'Cairo - القاهرة',
+                'giza': 'Giza - الجيزة',
+                'alexandria': 'Alexandria - الإسكندرية',
+                'suez': 'Suez - السويس',
+                'ismailia': 'Ismailia - الإسماعيلية',
+                'aswan': 'Aswan - أسوان',
+                'luxor': 'Luxor - الأقصر'
+            };
+            return cityNames[city] || city;
+        }
+
+        function calculateDuration(departure, arrival) {
+            const [depHours, depMinutes] = departure.split(':').map(Number);
+            const [arrHours, arrMinutes] = arrival.split(':').map(Number);
+            
+            let depTotal = depHours * 60 + depMinutes;
+            let arrTotal = arrHours * 60 + arrMinutes;
+            if (arrTotal < depTotal) {
+                arrTotal += 24 * 60;
+            }
+            
+            const duration = arrTotal - depTotal;
+            const hours = Math.floor(duration / 60);
+            const mins = duration % 60;
+            
+            return `${hours}h ${mins}m`;
+        }
+        window.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            document.getElementById('time').value = '06:00';
+        });
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchBuses();
+            }
+        });
+</script>
+</body>
+</html>

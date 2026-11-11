@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeCraft - Pure JS AI & Database</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --code-bg: #020617;
+      --ai-purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .hero {
+      margin-top: 40px;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: var(--ai-purple);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      flex: 1;
+      min-width: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel h2 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      background-color: var(--code-bg);
+      color: #e9d5ff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      background-color: var(--ai-purple);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .console-output {
+      margin-top: 12px;
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      min-height: 100px;
+      color: #c084fc;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+
+    .db-list {
+      list-style: none;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .db-item {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      background-color: var(--code-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .db-item h4 {
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+
+    .db-item p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <h1>Pure JS AI & Browser Database Engine</h1>
+    <p>Train a neural network using pure JavaScript code and store records in your local browser database.</p>
+  </header>
+
+  <main class="container">
+    
+    <!-- AI Playground Panel -->
+    <section class="panel">
+      <h2>Pure JS AI Neural Network (Perceptron)</h2>
+      <textarea id="aiCodeEditor" spellcheck="false">// TinyAI Class is built-in below!
+// Train an AI to learn the Logical AND Gate:
+const trainingData = [
+  { inputs: [0, 0], label: 0 },
+  { inputs: [0, 1], label: 0 },
+  { inputs: [1, 0], label: 0 },
+  { inputs: [1, 1], label: 1 }
+];
+
+// Initialize AI with 2 inputs
+const ai = new TinyAI(2);
+ai.train(trainingData, 3000, 0.2);
+
+// Test Predictions
+console.log("Test [0, 0] ->", ai.predict([0, 0]).toFixed(4));
+console.log("Test [1, 1] ->", ai.predict([1, 1]).toFixed(4));</textarea>
+      
+      <div class="btn-group">
+        <button class="btn" onclick="runAICode()">Run AI Model</button>
+        <button class="btn" style="background-color: var(--accent); color: var(--bg-dark);" onclick="saveToDatabase()">Save to Database</button>
+      </div>
+
+      <h3 style="margin-top: 15px; font-size: 0.95rem;">AI Training Output:</h3>
+      <div id="aiOutput" class="console-output">Click 'Run AI Model' to begin training...</div>
+    </section>
+
+    <!-- Database Storage Panel -->
+    <section class="panel" style="max-width: 400px;">
+      <h2>Browser Database (`localStorage`)</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Saved AI models & snippets stored securely in your browser:</p>
+      
+      <ul id="dbList" class="db-list">
+        <!-- Rendered via JavaScript -->
+      </ul>
+
+      <button class="btn" style="background-color: #ef4444; margin-top: 15px;" onclick="clearDatabase()">Clear Database</button>
+    </section>
+
+  </main>
+
+  <script>
+    /* ==========================================================
+       1. PURE JAVASCRIPT AI & MATRIX LIBRARY (TinyAI)
+       ========================================================== */
+    class TinyAI {
+      constructor(inputSize) {
+        this.weights = Array.from({ length: inputSize }, () => Math.random() * 2 - 1);
+        this.bias = Math.random() * 2 - 1;
+      }
+
+      static dot(v1, v2) {
+        return v1.reduce((sum, val, i) => sum + (val * v2[i]), 0);
+      }
+
+      sigmoid(x) {
+        return 1 / (1 + Math.exp(-x));
+      }
+
+      predict(inputs) {
+        const sum = TinyAI.dot(inputs, this.weights) + this.bias;
+        return this.sigmoid(sum);
+      }
+
+      train(data, epochs = 1000, lr = 0.1) {
+        for (let e = 0; e < epochs; e++) {
+          for (let row of data) {
+            const pred = this.predict(row.inputs);
+            const error = row.label - pred;
+            for (let i = 0; i < this.weights.length; i++) {
+              this.weights[i] += lr * error * pred * (1 - pred) * row.inputs[i];
+            }
+            this.bias += lr * error * pred * (1 - pred);
+          }
+        }
+      }
+    }
+
+    /* ==========================================================
+       2. DATABASE MANAGEMENT ENGINE (localStorage)
+       ========================================================== */
+    const DB_KEY = 'codecraft_pure_js_db';
+
+    function getDB() {
+      const data = localStorage.getItem(DB_KEY);
+      return data ? JSON.parse(data) : { snippets: [] };
+    }
+
+    function saveDB(db) {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+      renderDB();
+    }
+
+    function renderDB() {
+      const db = getDB();
+      const list = document.getElementById('dbList');
+      list.innerHTML = '';
+
+      if (db.snippets.length === 0) {
+        list.innerHTML = '<li class="db-item"><p>Database is empty.</p></li>';
+        return;
+      }
+
+      db.snippets.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'db-item';
+        li.innerHTML = `
+          <div>
+            <h4>${item.title}</h4>
+            <p>Saved in browser DB</p>
+          </div>
+          <button class="btn" style="background:#ef4444; padding:4px 8px; font-size:11px;" onclick="deleteItem(${index})">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function saveToDatabase() {
+      const code = document.getElementById('aiCodeEditor').value;
+      const title = prompt('Enter a name for your AI model in database:', 'My AI Model');
+      if (!title) return;
+
+      const db = getDB();
+      db.snippets.push({ title, code, timestamp: Date.now() });
+      saveDB(db);
+      alert('Successfully saved to browser database!');
+    }
+
+    function deleteItem(index) {
+      const db = getDB();
+      db.snippets.splice(index, 1);
+      saveDB(db);
+    }
+
+    function clearDatabase() {
+      if (confirm('Clear all database records?')) {
+        localStorage.removeItem(DB_KEY);
+        renderDB();
+      }
+    }
+
+    /* ==========================================================
+       3. CODE EXECUTION INTERFACE
+       ========================================================== */
+    function runAICode() {
+      const code = document.getElementById('aiCodeEditor').value;
+      const output = document.getElementById('aiOutput');
+      output.textContent = 'Training AI Neural Network...\n';
+
+      const logs = [];
+      const originalLog = console.log;
+      console.log = function(...args) {
+        logs.push(args.join(' '));
+        originalLog.apply(console, args);
+      };
+
+      try {
+        // Execute code containing TinyAI
+        new Function('TinyAI', code)(TinyAI);
+        output.textContent = logs.join('\n');
+      } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+      } finally {
+        console.log = originalLog;
+      }
+    }
+
+    // Initialize database view on page load
+    window.onload = renderDB;
+  </script>
+
+</body>
+</html>

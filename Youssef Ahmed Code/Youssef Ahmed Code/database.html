@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Manager - CodeCraft</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --code-bg: #020617;
+      --db-green: #34d399;
+      --db-red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .panel h2 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      color: var(--db-green);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-box h3 {
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    .stat-box p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      background-color: var(--accent);
+      color: var(--bg-dark);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn:hover { background-color: var(--accent-hover); }
+
+    .btn-danger {
+      background-color: var(--db-red);
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text-muted);
+      background-color: var(--code-bg);
+    }
+
+    .json-viewer {
+      background-color: var(--code-bg);
+      color: #a7f3d0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 13px;
+      height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Database Metrics Panel -->
+    <section class="panel">
+      <h2>Database Overview (`codecraft_pure_js_db`)</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <h3 id="recordCount">0</h3>
+          <p>Total Stored Models</p>
+        </div>
+        <div class="stat-box">
+          <h3>Active</h3>
+          <p>Local DB Connection</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn" onclick="loadDatabaseData()">Refresh View</button>
+        <button class="btn btn-danger" onclick="clearDatabaseRecords()">Clear Database</button>
+      </div>
+    </section>
+
+    <!-- Records Table Panel -->
+    <section class="panel">
+      <h2>Saved AI Snippets Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Model Title</th>
+            <th>Timestamp</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dbTableBody">
+          <!-- Loaded dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Raw JSON Inspector Panel -->
+    <section class="panel">
+      <h2>Raw JSON Database Schema</h2>
+      <div id="jsonViewer" class="json-viewer">Loading JSON data...</div>
+    </section>
+
+  </div>
+
+  <script>
+    const DB_KEY = 'codecraft_pure_js_db';
+
+    function loadDatabaseData() {
+      const rawData = localStorage.getItem(DB_KEY);
+      const tbody = document.getElementById('dbTableBody');
+      const jsonViewer = document.getElementById('jsonViewer');
+      const recordCount = document.getElementById('recordCount');
+
+      if (!rawData) {
+        recordCount.textContent = '0';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No records found in database.</td></tr>';
+        jsonViewer.textContent = '{ "snippets": [] }';
+        return;
+      }
+
+      const db = JSON.parse(rawData);
+      recordCount.textContent = db.snippets.length;
+      jsonViewer.textContent = JSON.stringify(db, null, 2);
+
+      tbody.innerHTML = '';
+      if (db.snippets.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No records found in database.</td></tr>';
+        return;
+      }
+
+      db.snippets.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        const dateStr = new Date(item.timestamp).toLocaleString();
+        tr.innerHTML = `
+          <td><strong>${escapeHTML(item.title)}</strong></td>
+          <td style="color: var(--text-muted);">${dateStr}</td>
+          <td>
+            <button class="btn btn-danger" style="padding: 4px 8px; font-size:11px;" onclick="deleteRecord(${index})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteRecord(index) {
+      const rawData = localStorage.getItem(DB_KEY);
+      if (!rawData) return;
+
+      const db = JSON.parse(rawData);
+      db.snippets.splice(index, 1);
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+      loadDatabaseData();
+    }
+
+    function clearDatabaseRecords() {
+      if (confirm('Are you sure you want to delete all records from the database?')) {
+        localStorage.removeItem(DB_KEY);
+        loadDatabaseData();
+      }
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    // Load data on page open
+    window.onload = loadDatabaseData;
+  </script>
+
+</body>
+</html>

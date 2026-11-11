@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAG Learning Coding</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand img {
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .brand h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a.login-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        nav a.login-btn:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title h2 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .course-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+ input{
+color:rgb(255, 255, 255);
+text-align: center;
+border: 10px;
+border-radius: 20px;
+height: 60px;
+width: 300px;
+background-color: #1e293b;
+ }
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-color: var(--primary);
+        }
+
+        .course-card img {
+            margin-bottom: 1rem;
+            object-fit: contain;
+        }
+
+        .course-card a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <input type="text" placeholder="Enter you Search...">
+        <div class="brand">
+            <img src="YAG.png" width="45" height="45" alt="YAG Logo">
+            <h1>YAG Company</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="python.html">AI Python</a></li>
+                <li><a href="bus-time-egypt.html">Script.js</a></li>
+                <li><a href="database.html">Data Base</a></li>
+                <li><a href="newproject.html">HTML & JS</a></li>
+                <li><a href="login.html" class="login-btn">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero-title">
+            <h2>Welcome to YAG Learning Coding</h2>
+            <p>Select a learning path below to get started.</p>
+        </div>
+
+        <ol class="courses-grid">
+            <li class="course-card">
+                <a href="/AI/">
+                    <img src="python.png" width="64" height="64" alt="Python">
+                    <span>AI Python</span>
+                </a>
+            </li>
+            <li class="course-card">
+                <a href="/digtopia/">
+                    <img src="JavaScript-Symbol.png" width="64" height="64" alt="JavaScript">
+                    <span>Script.js</span>
+                </a>
+            </li>
+            <li class="course-card">
+                <a href="/YAG  Company/">
+                    <img src="data base.png" width="64" height="64" alt="Data Base">
+                    <span>Data Base</span>
+                </a>
+            </li>
+            <li class="course-card">
+                <a href="/project/">
+                    <img src="html.png" width="64" height="64" alt="HTML">
+                    <span>HTML & JS</span>
+                </a>
+            </li>
+        </ol>
+    </main>
+
+    <footer>
+        &copy; 2026 YAG Company. All rights reserved.
+    </footer>
+
+</body>
+</html>

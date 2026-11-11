@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Status - CodeCraft</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --code-bg: #020617;
+      --status-online: #34d399;
+      --status-warning: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background-color: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .hero {
+      margin-top: 100px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .panel h2 {
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .server-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .server-card {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .server-info h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .server-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .online { background-color: var(--status-online); }
+    .maintenance { background-color: var(--status-warning); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Right Navigation -->
+  <div class="nav">
+    <a href="About.html">About</a> 
+    <a href="Contactus.html">Contact Us</a> 
+    <a href="Servers.html" class="active">Servers</a> 
+    <a href="Learning.html">Learning</a> 
+  </div>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1>System Status & Servers</h1>
+    <p>Monitor our execution nodes, sandbox clusters, and API instances in real time.</p>
+  </header>
+
+  <!-- Content Section -->
+  <main class="container">
+    <section class="panel">
+      <h2>Active Node Clusters</h2>
+      <div class="server-list">
+        <div class="server-card">
+          <div class="server-info">
+            <h3>US-East (Node Execution Cluster #1)</h3>
+            <p>Region: Virginia | Latency: 24ms</p>
+          </div>
+          <div class="status-badge">
+            <span class="dot online"></span>
+            <span style="color: var(--status-online);">Operational</span>
+          </div>
+        </div>
+
+        <div class="server-card">
+          <div class="server-info">
+            <h3>EU-Central (Sandbox Engine)</h3>
+            <p>Region: Frankfurt | Latency: 42ms</p>
+          </div>
+          <div class="status-badge">
+            <span class="dot online"></span>
+            <span style="color: var(--status-online);">Operational</span>
+          </div>
+        </div>
+
+        <div class="server-card">
+          <div class="server-info">
+            <h3>AP-East (Learning API Node)</h3>
+            <p>Region: Tokyo | Latency: 110ms</p>
+          </div>
+          <div class="status-badge">
+            <span class="dot maintenance"></span>
+            <span style="color: var(--status-warning);">Maintenance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

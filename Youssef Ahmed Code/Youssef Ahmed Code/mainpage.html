@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeCraft - Learn to Code Interactively</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --code-bg: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Fixed Header Navigation */
+    .nav {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background-color: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-top: 100px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Main Container Layout */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel h2 {
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    /* Editor Section */
+    textarea {
+      width: 100%;
+      height: 200px;
+      background-color: var(--code-bg);
+      color: #7dd3fc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .btn-run {
+      margin-top: 15px;
+      background-color: var(--accent);
+      color: var(--bg-dark);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-run:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Output Console */
+    .console-output {
+      margin-top: 15px;
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      min-height: 80px;
+      color: #a7f3d0;
+      white-space: pre-wrap;
+    }
+
+    /* Sidebar Course Progress */
+    .course-list {
+      list-style: none;
+    }
+
+    .course-item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .course-item:hover {
+      background-color: var(--border);
+    }
+
+    .course-item h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .course-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Right Navigation -->
+  <div class="nav">
+    <a href="About.html">About</a> 
+    <a href="Contactus.html">Contact Us</a> 
+    <a href="Servers.html">Servers</a> 
+    <a href="Learning.html" class="active">Learning</a> 
+  </div>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1>Learn Code Hands-On</h1>
+    <p>Practice writing JavaScript live in your browser and complete beginner exercises.</p>
+  </header>
+
+  <!-- Interactive Sandbox & Courses -->
+  <main class="container">
+    
+    <!-- Code Editor Panel -->
+    <section class="panel">
+      <h2>Interactive Playground</h2>
+      <textarea id="codeEditor" spellcheck="false">// Try writing JavaScript here!
+function greet(name) {
+  return "Hello, " + name + "! Welcome to CodeCraft.";
+}
+
+console.log(greet("Developer"));</textarea>
+      <button class="btn-run" onclick="runCode()">Run Code</button>
+      
+      <h3 style="margin-top: 20px; font-size: 1rem;">Console Output:</h3>
+      <div id="consoleOutput" class="console-output">Output will appear here...</div>
+    </section>
+
+    <!-- Track List Panel -->
+    <section class="panel" style="max-width: 380px;">
+      <h2>Popular Modules</h2>
+      <ul class="course-list">
+        <li class="course-item" onclick="loadLesson('HTML Basics')">
+          <h3>1. HTML Structure</h3>
+          <p>Learn elements, attributes, and page layouts.</p>
+        </li>
+        <li class="course-item" onclick="loadLesson('CSS Styling')">
+          <h3>2. CSS & Flexbox</h3>
+          <p>Master layout alignment, colors, and responsive design.</p>
+        </li>
+        <li class="course-item" onclick="loadLesson('JS Logic')">
+          <h3>3. JavaScript Fundamentals</h3>
+          <p>Explore variables, functions, and dynamic interactions.</p>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    // Live JavaScript Code Execution Logic
+    function runCode() {
+      const code = document.getElementById('codeEditor').value;
+      const outputDiv = document.getElementById('consoleOutput');
+      outputDiv.textContent = ''; // Clear previous output
+
+      // Intercept standard console.log output
+      const logs = [];
+      const originalLog = console.log;
+      console.log = function(...args) {
+        logs.push(args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' '));
+        originalLog.apply(console, args);
+      };
+
+      try {
+        new Function(code)();
+        outputDiv.textContent = logs.length > 0 ? logs.join('\n') : 'Code executed successfully (no output).';
+      } catch (error) {
+        outputDiv.textContent = 'Error: ' + error.message;
+      } finally {
+        console.log = originalLog; // Restore standard console.log
+      }
+    }
+
+    // Dynamic lesson selector mock
+    function loadLesson(lessonName) {
+      alert('Selected track: ' + lessonName + '. Module content loading...');
+    }
+  </script>
+
+</body>
+</html>

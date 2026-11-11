@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css.css">
+    <link rel="icon" type="image/x-icon" href="https://static.vecteezy.com/system/resources/previews/026/183/272/original/creative-calculator-logo-icon-design-template-free-vector.jpg">
+    <title>calculator</title>
+</head>
+<body>
+    <style>
+        :root {
+  --bg-color: #f0f0ff;
+  --text-color: #000000;
+  --button-bg: #007bff;
+  --button-hover-bg: #0056b3;
+  --container-bg: #fff;
+  --back-bg:white; 
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+#back{
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+   box-shadow: 0 0 100px rgb(0, 204, 255);
+   padding: 30px,30px;
+   border-radius: 5px;
+   border: 10px;
+   text-align: center;
+   justify-content: center;
+   width: 350px;
+}
+img{
+border-radius: 10px;
+border: 10px;
+}
+#container {
+  background-color: var(--container-bg);
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: rgb(0, 0, 0);
+  color: #ffffff;
+ box-shadow: 0 0 100px rgb(0, 204, 255);
+}
+
+input, label, select {
+  display: block;
+  margin: 10px 0;
+  width: 90%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+button {
+  background-color: var(--button-bg);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  color: #000000;
+  cursor: pointer;
+  background-color: #007bff;
+}
+button:hover {
+  background-color: var(--button-hover-bg);
+  background-color: #0056b3;
+}
+#result {
+  color: rgb(25, 136, 25);
+}
+.history {
+  margin-top: 20px;
+  text-align: left;
+  text-align: center;
+}
+#historylist {
+  list-style: none;
+  padding: 0;
+}
+#historylist li {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+    </style>
+    <div id="back">
+        <img src="https://static.vecteezy.com/system/resources/previews/026/183/272/original/creative-calculator-logo-icon-design-template-free-vector.jpg"-width="100px" height="100px">
+<div id="contaner">
+    <h1>calculator</h1>
+     <div class="toggol">
+   <label for="toggol">Dark Mode:</label>
+   <input type="checkbox" name="toggol" id="toggol">
+     </div>
+<div class="calc">
+    <input type="text" id="value1" placeholder="Enter a number">
+    <select name="operation" id="operation">
+        <option value="+">add</option>
+        <option value="-sup">sup</option>
+        <option value="*">mult</option>
+        <option value="^">power</option>
+        <option value="sqrt">sqrt 1</option>
+        <option value="%">persent</option>
+    </select>
+<input type="text" id="value2" placeholder="Enter your second number">
+<div class="buttons">
+    <button>calculator</button>
+<button>clear</button>
+</div>
+<p id="result"></p>
+</div>
+<div class="history">
+    <h1>cacluations history</h1>
+    <lu id="history"></lu>
+</div>
+</div>
+</div>
+<script src="cal.js">    const value1 = document.getElementById('value1');
+    const value2 = document.getElementById('value2');
+    const operation = document.getElementById('operation');
+    const result = document.getElementById('result');
+    const history = document.getElementById('history');
+    const toggle = document.getElementById('toggle') || document.getElementById('toggol');
+    const buttons = document.querySelectorAll('.buttons button');
+
+    function applyTheme() {
+        const isDarkMode = toggle ? Boolean(toggle.checked) : localStorage.getItem('theme') === 'dark' ||
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        document.body.classList.toggle('dark-mode', isDarkMode);
+        document.body.classList.toggle('light-mode', !isDarkMode);
+        document.body.dataset.theme = isDarkMode ? 'dark' : 'light';
+
+        document.body.style.backgroundColor = isDarkMode ? '#111827' : '#f5f7fb';
+        document.body.style.color = isDarkMode ? '#f9fafb' : '#111827';
+
+        const inputs = document.querySelectorAll('input, select, button, li');
+        inputs.forEach((element) => {
+            element.style.backgroundColor = isDarkMode ? '#1f2937' : '#ffffff';
+            element.style.color = isDarkMode ? '#f9fafb' : '#111827';
+            element.style.borderColor = isDarkMode ? '#374151' : '#d1d5db';
+        });
+
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    }
+
+    function calculate() {
+        const first = Number(value1.value);
+        const second = Number(value2.value);
+        const op = operation.value;
+        let answer;
+
+        if (value1.value.trim() === '' || Number.isNaN(first) ||
+            (op !== 'sqrt' && (value2.value.trim() === '' || Number.isNaN(second)))) {
+            result.textContent = 'Please enter valid numbers.';
+            return;
+        }
+
+        switch (op) {
+            case '+': answer = first + second; break;
+            case '-sup': answer = first - second; break;
+            case '*': answer = first * second; break;
+            case '^': answer = first ** second; break;
+            case 'sqrt': answer = Math.sqrt(first); break;
+            case '%': answer = (first * second) / 100; break;
+            default: result.textContent = 'Invalid operation.'; return;
+        }
+
+        if (!Number.isFinite(answer)) {
+            result.textContent = 'Invalid calculation.';
+            return;
+        }
+
+        result.textContent = `Result: ${answer}`;
+        const item = document.createElement('li');
+        item.textContent = `${value1.value} ${op} ${op === 'sqrt' ? '' : value2.value} = ${answer}`;
+        history.prepend(item);
+    }
+
+    function clearCalculator() {
+        value1.value = '';
+        value2.value = '';
+        result.textContent = '';
+        history.innerHTML = '';
+    }
+
+    buttons[0]?.addEventListener('click', calculate);
+    buttons[1]?.addEventListener('click', clearCalculator);
+
+    if (toggle) {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            toggle.checked = true;
+        }
+
+        toggle.addEventListener('change', applyTheme);
+    }
+
+    applyTheme();</script>
+</body>
+</html>
